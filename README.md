@@ -18,8 +18,7 @@ O objetivo é implementar uma API completa para a entidade **Atleta**, com as se
 | Nome Completo | Matrícula | Função (Atribuição Principal) |
 | :--- | :--- | :--- |
 | **Geraldo Lucio Carvalho dos Santos** | 2424290069 | Setup, Infraestrutura e Conexão DB |
-| **Gustavo Almeida Von Sperling de Lima** | 2414290052 | Segurança (JWT) e Testes |
-| **Pedro Medeiros Resende** | 2424290048 | CRUD Core, Validações e Documentação (Team Leader) |
+| **Pedro Medeiros Resende** | 2424290048 | CRUD Core, Validações e Documentação |
 
 ---
 
@@ -43,9 +42,10 @@ O objetivo é implementar uma API completa para a entidade **Atleta**, com as se
 
 Para obter o código-fonte do projeto em sua máquina local, abra seu terminal e execute o seguinte comando:
 
-cd fitTracker-API  
-git clone [https://github.com/Gerebabh/Fit-Tracker-API.git](https://github.com/Gerebabh/Fit-Tracker-API.git)
-
+```bash
+cd Fit-Tracker-API
+git clone https://github.com/Gerebabh/Fit-Tracker-API.git
+```
 
 ---
 
@@ -53,7 +53,9 @@ git clone [https://github.com/Gerebabh/Fit-Tracker-API.git](https://github.com/G
 
 Adotamos o padrão Conventional Commits para garantir mensagens de commit padronizadas, claras e rastreáveis. Cada mensagem deve ter o formato:
 
-`<tipo>(<escopo>): <descrição breve>`
+```
+<tipo>(<escopo>): <descrição breve>
+```
 
 Onde:
 * **tipo**: Define a natureza da alteração.
@@ -83,17 +85,18 @@ O plano abaixo segue a metodologia **TDD (Test-Driven Development)**, priorizand
 | #1 | Setup Inicial do Projeto (Express, Jest, Estrutura, Dependências) | Geraldo | **BASE** | 🟡 EM ANDAMENTO |
 | #2 | Configuração do DB (MongoDB/Mongoose) e Variáveis de Ambiente | Geraldo | **BASE** | 🔵 PENDENTE |
 | #3 | Modelo Mongoose e Validações Iniciais (Schema Atleta) | Geraldo | **BASE** | 🔵 PENDENTE |
-| #4 | Implementação e Testes: Rotas de Leitura (GET All e GET by ID) | Pedro / Gustavo | **CRUD** | 🔵 PENDENTE |
-| #5 | Implementação e Testes: Rota de Criação (POST) | Pedro / Gustavo | **CRUD** | 🔵 PENDENTE |
-| #6 | Implementação e Testes: Rotas de Modificação e Deleção (PUT/PATCH, DELETE) | Pedro / Gustavo | **CRUD** | 🔵 PENDENTE |
+| #4 | Implementação e Testes: Rotas de Leitura (GET All e GET by ID) | Pedro | **CRUD** | 🔵 PENDENTE |
+| #5 | Implementação e Testes: Rota de Criação (POST) | Pedro | **CRUD** | 🔵 PENDENTE |
+| #6 | Implementação e Testes: Rotas de Modificação e Deleção (PUT/PATCH, DELETE) | Pedro | **CRUD** | 🔵 PENDENTE |
 | #7 | Refatoração: Tratamento de Erros (Status HTTP 4XX/5XX) e Middleware de Validação | Pedro | **ROBUSTEZ** | 🔵 PENDENTE |
 | #8 | Implementação Rota de Autenticação (POST /login) e Geração de JWT | Pedro | **SEGURANÇA** | 🔵 PENDENTE |
 | #9 | Implementação Middleware de Autenticação e Proteção das Rotas de Escrita | Geraldo | **SEGURANÇA** | 🔵 PENDENTE |
-| #10 | Desenvolvimento de Testes de Segurança (Login e Rotas Protegidas) | Gustavo | **QUALIDADE** | 🔵 PENDENTE |
-| #11 | Documentação da API com Swagger (OpenAPI) | Pedro/Geraldo/Gustavo | **DOCUMENTAÇÃO** | 🔵 PENDENTE |
-| #12 | Revisão Final (README, Cobertura de Testes e Histórico de Issues) | Pedro/Geraldo/Gustavo | **FINALIZAÇÃO** | 🔵 PENDENTE |
+| #10 | Desenvolvimento de Testes de Segurança (Login e Rotas Protegidas) | Geraldo | **QUALIDADE** | 🔵 PENDENTE |
+| #11 | Documentação da API com Swagger (OpenAPI) | Pedro / Geraldo | **DOCUMENTAÇÃO** | 🔵 PENDENTE |
+| #12 | Revisão Final (README, Cobertura de Testes e Histórico de Issues) | Pedro / Geraldo | **FINALIZAÇÃO** | 🔵 PENDENTE |
 
 ---
+
 **Legenda de Status:**
 - 🔵 PENDENTE: A tarefa ainda não foi iniciada.
 - 🟡 EM ANDAMENTO: O trabalho na tarefa está em curso.
