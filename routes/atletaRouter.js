@@ -3,9 +3,13 @@ const router = express.Router();
 
 const atletasController = require('../controllers/atletaController'); 
 
-router.get('/atletas', atletasController.listar); 
+router.post('/', atletasController.criar); 
 
-router.get('/atletas/:id', atletasController.buscar, atletasController.exibir); 
+router.get('/', atletasController.listar); 
+
+router.get('/:id', atletasController.buscar, atletasController.exibir); 
+
+
 
 
 

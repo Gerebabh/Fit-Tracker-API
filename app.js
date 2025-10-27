@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-app.use ('/atletas', atletaRouter)
+app.use('/atletas', atletaRouter)
 
 module.exports = app;
 
