@@ -40,7 +40,7 @@ const atletaSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A modalidade é obrigatória.'],
         enum: {
-            values: ['Corrida', 'Natação', 'Ciclismo', 'Triathlon', 'Musculação', 'Crossfit'],
+            values: ['Corrida', 'Natação', 'Ciclismo', 'Triatlo', 'Musculação', 'Crossfit'],
             message: 'Modalidade inválida. Escolha uma das opções.'
         }
     },
@@ -55,6 +55,5 @@ const atletaSchema = new mongoose.Schema({
     timestamps: true 
 });
 
-const Atleta = mongoose.model('Atleta', atletaSchema);
+module.exports = mongoose.model('Atleta', atletaSchema);
 
-module.exports = Atleta;

@@ -6,8 +6,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require("mongoose"); 
+const atletaRouter = require('./routes/atletaRouter'); 
 
-const userRouter = require('./routes/userRouter')
 
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASWD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}`;
 mongoose.connect(url)
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 
-app.use ('/users', userRouter)
+app.use ('/atletas', atletaRouter)
 
 module.exports = app;
 
