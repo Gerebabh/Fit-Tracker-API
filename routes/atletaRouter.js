@@ -9,6 +9,10 @@ router.get('/', atletasController.listar);
 
 router.get('/:id', atletasController.buscar, atletasController.exibir); 
 
+router.put('/:id', atletasController.buscar, atletasController.atualizar); 
+
+router.delete('/:id', atletasController.buscar, atletasController.remover); 
+
 
 
 

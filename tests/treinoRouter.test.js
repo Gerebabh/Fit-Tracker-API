@@ -63,5 +63,44 @@ describe('Testes do recurso /treinos', () => {
         expect(response.body.intensidade).toBe("Moderado"); 
         expect(response.body.distancia).toBe(50); 
         expect(response.body.observacoes).toBe('2 horas de giro leve, percorrendo no mínimo 50km'); 
-    } )
-})
+    }); 
+
+    test('PUT /treinos/:id deve retornar 200', async() => { 
+        const response = await request.put(`${url}/${treinoId}`)
+        .send(
+            {
+                atleta: atletaId,
+                data: "2025-10-28", 
+                tipo: "Natação", 
+                duracao: 40, 
+                intensidade: "Moderado", 
+                distancia: 2, 
+                observacoes: "Treino anaeróbico, rodagem na água moderada, 2km."
+            }
+        ); 
+        expect(response.status).toBe(200); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body._id).toBeDefined(); 
+        expect(response.body.atleta).toBeDefined(); 
+        expect(response.body.data).toBeDefined(); 
+        expect(response.body.tipo).toBe("Natação"); 
+        expect(response.body.duracao).toBe(40); 
+        expect(response.body.intensidade).toBe("Moderado"); 
+        expect(response.body.distancia).toBe(2), 
+        expect(response.body.observacoes).toBe("Treino anaeróbico, rodagem na água moderada, 2km."); 
+    }); 
+
+    test('DELETE /treinos/:id deve retornar 204 sem corpo', async() => { 
+        const response = await request.delete(`${url}/${treinoId}`); 
+        expect(response.status).toBe(204); 
+    })
+}); 
+
+afterAll(async() => { 
+    if(atletaId) { 
+        await request.delete(`/atletas/${atletaId}`)
+    }
+}); 
+
+
+

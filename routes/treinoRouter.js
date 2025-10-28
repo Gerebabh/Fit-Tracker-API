@@ -9,4 +9,8 @@ router.get('/', treinoController.listar);
 
 router.get('/:id', treinoController.buscar, treinoController.exibir); 
 
+router.put('/:id', treinoController.buscar, treinoController.atualizar); 
+
+router.delete('/:id', treinoController.buscar, treinoController.remover); 
+
 module.exports = router; 
