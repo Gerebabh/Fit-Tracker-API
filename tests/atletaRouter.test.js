@@ -30,6 +30,13 @@ describe('Testes do recuros /atletas', () => {
         id = response.body._id; 
     }); 
 
+    test('POST /atletas deve retornar 422', async() => { 
+        const response = await request.post(url);
+        expect(response.status).toBe(422); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Obrigatório passar o corpo da requisição")
+    })
+
     test('GET /atletas deve retornar 200', async() => { 
         const response = await request.get(url); 
         expect(response.status).toBe(200); 
@@ -50,6 +57,20 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.modalidade).toBe('Triatlo');
         expect(response.body.ativo).toBe(true);
     }); 
+
+    test('GET /atletas/0 deve retornar 400(ID inválido)', async() => {
+        const response = await request.get(`${url}/0`); 
+        expect(response.status).toBe(400); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Parâmetro inválido")
+    }); 
+
+    test('GET /atletas/000000000000000000000000 deve retornar 404 (ID válido mas não encontrado)', async() => { 
+        const response = await request.get(`${url}/000000000000000000000000`); 
+        expect(response.status).toBe(404); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Atleta não encontrado"); 
+    })
 
     test('PUT /atletas/:id deve retornar 200', async() => { 
         const response = await request.put(`${url}/${id}`)
@@ -76,9 +97,54 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.ativo).toBe(true); 
     });
 
+    test('PUT /atletas/0 deve retornar 400', async() => { 
+        const response = await request.put(`${url}/0`); 
+        expect(response.status).toBe(400); 
+        expect(response.headers['content-type']).toMatch(/json/);
+        expect(response.body.msg).toBe("Parâmetro inválido");
+    }); 
+
+    test('PUT /atletas/000000000000000000000000 deve retornar 404', async() => { 
+        const response = await request.put(`${url}/000000000000000000000000`); 
+        expect(response.status).toBe(404); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Atleta não encontrado")
+    }); 
+
+    test('PUT /atletas/:id deve retornar 422 (Sem passar os parâmetros)', async() => { 
+        const response = await request.put(`${url}/${id}`)
+        .send(
+            {
+                nome: "", 
+                email: "", 
+                idade: "", 
+                peso: "", 
+                altura: "", 
+                modalidade: ""
+            }
+        ); 
+        expect(response.status).toBe(422); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Os parâmetros nome, email, idade, peso, altura e modalidade são obrigatórios"); 
+    })
+
     test('DELETE /atletas/:id deve retornar 204 sem corpo', async() => { 
         const response = await request.delete(`${url}/${id}`); 
         expect(response.status).toBe(204); 
+    }); 
+
+    test('DELETE /atletas/0 deve retornar 400', async() => { 
+        const response = await request.delete(`${url}/0`); 
+        expect(response.status).toBe(400); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Parâmetro inválido")
+    }); 
+
+    test('DELETE /atletas/000000000000000000000000 deve retornar 404', async() => { 
+        const response = await request.delete(`${url}/000000000000000000000000`); 
+        expect(response.status).toBe(404); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body.msg).toBe("Atleta não encontrado")
     })
 
 })
