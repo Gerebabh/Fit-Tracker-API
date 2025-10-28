@@ -51,4 +51,34 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.ativo).toBe(true);
     }); 
 
+    test('PUT /atletas/:id deve retornar 200', async() => { 
+        const response = await request.put(`${url}/${id}`)
+        .send(
+            {
+                nome: "Filipe Aragão", 
+                email: "filipearagao@mail.com.br", 
+                idade: 40, 
+                peso: 64.5, 
+                altura: 1.68, 
+                modalidade: "Triatlo", 
+                ativo: true,
+            }
+        ); 
+        expect(response.status).toBe(200); 
+        expect(response.headers['content-type']).toMatch(/json/); 
+        expect(response.body._id).toBeDefined(); 
+        expect(response.body.nome).toBe("Filipe Aragão"); 
+        expect(response.body.email).toBe("filipearagao@mail.com.br"); 
+        expect(response.body.idade).toBe(40); 
+        expect(response.body.peso).toBe(64.5); 
+        expect(response.body.altura).toBe(1.68); 
+        expect(response.body.modalidade).toBe("Triatlo"); 
+        expect(response.body.ativo).toBe(true); 
+    });
+
+    test('DELETE /atletas/:id deve retornar 204 sem corpo', async() => { 
+        const response = await request.delete(`${url}/${id}`); 
+        expect(response.status).toBe(204); 
+    })
+
 })

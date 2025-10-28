@@ -33,5 +33,20 @@ async function exibir(req,res) {
     return res.status(200).json(req.atleta); 
 };
 
-module.exports = { listar, buscar, exibir, criar }; 
+async function atualizar(req,res) { 
+    const {id} = req.params; 
+    const atletaAtualizado = await Atleta.findOneAndUpdate(
+        {_id:id},
+        {...req.body},
+        {new: true}
+        )
+    return res.status(200).json(atletaAtualizado); 
+}; 
+
+async function remover(req,res) { 
+    const {id} = req.params ; 
+    const atletaRemovido = await Atleta.findOneAndDelete({_id:id}); 
+    return res.status(204).end()
+}
+module.exports = { listar, buscar, exibir, criar, atualizar, remover }; 
 
