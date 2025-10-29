@@ -6,6 +6,8 @@ let atletaId = null ;
 let treinoId = null ; 
 const url = '/treinos'; 
 
+// TESTE
+
 beforeAll(async() => { 
     const res = await request.post('/atletas').send({
         nome: "Pedro Resende",
