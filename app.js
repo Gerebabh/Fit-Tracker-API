@@ -8,6 +8,7 @@ const logger = require('morgan');
 const mongoose = require("mongoose"); 
 const atletaRouter = require('./routes/atletaRouter'); 
 const treinoRouter = require('./routes/treinoRouter'); 
+const authRouter = require('./routes/authRouter'); 
 
 
 const url = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASWD}@${process.env.MONGODB_HOST}/${process.env.MONGODB_DBNAME}`;
@@ -29,6 +30,8 @@ app.use(cookieParser());
 
 app.use('/atletas', atletaRouter); 
 app.use('/treinos', treinoRouter); 
+app.use('/auth', authRouter); 
+
 
 module.exports = app;
 
