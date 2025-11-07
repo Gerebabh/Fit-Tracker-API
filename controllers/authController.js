@@ -12,7 +12,7 @@ async function criarLogin(req,res) {
 }; 
 
 async function login(req,res) { 
-    const {email,senha} = req.body; 
+    const {email,senha,funcao} = req.body; 
 
     const usuario = await Registro.findOne({email:email}); 
     if(!usuario) {
@@ -28,17 +28,23 @@ async function login(req,res) {
         id: usuario._id, 
         nome: usuario.nome, 
         email: usuario.email,
+        funcao: usuario.funcao,
     }; 
 
     const token = authMiddleware.gerarToken(payload);
 
-    console.log('Token:', token)
 
     return res.status(201).json({token: `${token}`})
 
 }
 
-module.exports = { criarLogin,login }; 
+async function remover(req,res) { 
+    const {id} = req.params
+    const usuarioRemovido = await Registro.findOneAndDelete({_id:id})
+    return res.status(204).end()
+}
+
+module.exports = { criarLogin,login,remover}; 
 
 
 

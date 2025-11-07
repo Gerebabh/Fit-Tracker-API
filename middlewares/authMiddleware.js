@@ -31,11 +31,19 @@ function gerarToken(payload) {
 
 function renovarToken(req,res) { 
     try { 
-        const payload = req.payload ; 
+        console.log("PAYLOAD RECEBIDO AQUI", req.payload);
+        const payload = 
+        {
+            nome: req.payload.nome, 
+            email: req.payload.email, 
+            funcao: req.payload.funcao
+        } ; 
         const novoToken = gerarToken(payload); 
-        res.json({token: `${novoToken}`}) 
+        console.log("PASSOU AQUIIIIIII ")
+        return res.status(200).json({token: `${novoToken}`}) 
     } catch (err) { 
-        res.status(500).json({msg: "Erro ao renovar o token"})
+        console.log("PAYLOAD RECEBIDO AQUI", req.payload, err.message);
+        return res.status(500).json({msg: "Erro ao renovar o token"})
     }
 }; 
 

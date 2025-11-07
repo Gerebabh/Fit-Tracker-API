@@ -25,6 +25,13 @@ const loginSchema = new mongoose.Schema({
     senha : { 
         type: "String", 
         required: [true,'A senha é obrigatória']
+    }, 
+
+    funcao : { 
+        type: String, 
+        enum: [ 'admin', 'professor', 'aluno' ], 
+        required : [true, 'É obrigatório passar a função.'], 
+        default: 'aluno',
     }
 }, { 
     timestamps: true
