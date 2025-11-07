@@ -2,19 +2,15 @@ const express = require('express');
 const router = express.Router(); 
 
 const atletasController = require('../controllers/atletaController'); 
+const {verificarToken} = require('../middlewares/authMiddleware'); 
+const {autorizarFuncoes} = require('../middlewares/roleMiddleware'); 
 
-router.post('/', atletasController.criar); 
+router.post('/', verificarToken, autorizarFuncoes('admin'), atletasController.criar); 
 
-router.get('/', atletasController.listar); 
+router.get('/', verificarToken,  atletasController.listar); 
+router.get('/:id', verificarToken, atletasController.buscar, atletasController.exibir); 
 
-router.get('/:id', atletasController.buscar, atletasController.exibir); 
-
-router.put('/:id', atletasController.buscar, atletasController.atualizar); 
-
-router.delete('/:id', atletasController.buscar, atletasController.remover); 
-
-
-
-
+router.put('/:id', verificarToken, autorizarFuncoes('professor', 'admin', 'aluno') ,atletasController.buscar, atletasController.atualizar); 
+router.delete('/:id', verificarToken, autorizarFuncoes('admin'), atletasController.buscar, atletasController.remover); 
 
 module.exports = router; 
