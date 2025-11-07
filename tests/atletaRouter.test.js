@@ -94,6 +94,20 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.ativo).toBe(true); 
         id = response.body._id; 
     }); 
+
+    test('POST /atletas deve retornar 401', async() => { 
+        const response = await request.post(url); 
+        expect(response.status).toBe(401)
+        expect(response.body.msg).toBe("Não autorizado")
+    }); 
+
+    test('POST /atletas deve retornar 401', async() => { 
+        const response = await request
+        .post(url)
+        .set('Authorization', `Bearer 123456789`); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    })
     
     test('POST /atletas deve retornar 403', async() => { 
         const response = await request
@@ -122,6 +136,21 @@ describe('Testes do recuros /atletas', () => {
         expect(Array.isArray(response.body)).toBe(true); 
     }); 
 
+    test('GET /atletas deve retornar 401', async() => { 
+        const response = await request.get(url)
+        expect(response.status).toBe(401);
+        expect(response.body.msg).toBe("Não autorizado"); 
+    }); 
+
+    test('GET /atletas deve retornar 401', async() => { 
+        const response = await request
+        .get(url)
+        .set('Authorization', `Bearer 1234567890`); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    }); 
+
+
     test('GET /atletas/:id deve retornar 200', async() => { 
         const response = await request.get(`${url}/${id}`)
         .set('Authorization', `Bearer ${tokenAluno}`); 
@@ -144,6 +173,20 @@ describe('Testes do recuros /atletas', () => {
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
+
+    test('GET /atletas/:id deve retornar 401', async() => { 
+        const response = await request.get(`${url}/${id}`)
+        expect(response.status).toBe(401)
+        expect(response.body.msg).toBe("Não autorizado")
+    });
+
+    test('GET /atletas/:id deve retornar 401', async() => { 
+        const response = await request.get(`${url}/${id}`)
+        .set('Authorization', `Bearer 123456789`);
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    });
+
 
     test('GET /atletas/000000000000000000000000 deve retornar 404 (ID válido mas não encontrado)', async() => { 
         const response = await request.get(`${url}/000000000000000000000000`)
@@ -187,8 +230,18 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.msg).toBe("Parâmetro inválido");
     }); 
 
+    test('PUT /atletas/:id deve retornar 401', async() => { 
+        const response = await request.put(`${url}/${id}`);
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado")
+    }); 
 
-    
+    test('PUT /atletas/:id deve retornar 401', async() => { 
+        const response = await request.put(`${url}/${id}`)
+        .set('Authorization', 'Bearer 123456890')
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    });
 
     test('PUT /atletas/000000000000000000000000 deve retornar 404', async() => { 
         const response = await request.put(`${url}/000000000000000000000000`)
@@ -230,6 +283,20 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
 
+    test('DELETE /atletas/:id deve retornar 401', async() => { 
+        const response = await request.delete(`${url}/${id}`); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado");
+    })
+
+    test('DELETE /atletas/:id deve retornar 401', async() => { 
+        const response = await request.delete(`${url}/${id}`)
+        .set('Authorization', 'Bearer 1234578798'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    });
+
+    
     test('DELETE /atletas deve retornar 403', async() => { 
         const response = await request
         .delete(`${url}/${id}`)
@@ -261,5 +328,4 @@ afterAll(async() => {
             .set('Authorization', `Bearer ${usuario.token}`); 
         }
     }
-}); 
-
+});
