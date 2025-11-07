@@ -107,6 +107,20 @@ describe('Testes do recurso /treinos', () => {
         treinoId = response.body._id ; 
     }); 
 
+    test('POST /atletas deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.post(url)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado")
+    });
+
+    test('POST /atletas deve retornar 401 (ID INVÁLIDO)', async() => { 
+        const response = await request.post(url)
+        .set('Authorization', 'Bearer 1234567890'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    });
+
+    
     test('POST /atletas deve retornar 403', async() => { 
         const response = await request
         .post(url)
@@ -135,6 +149,19 @@ describe('Testes do recurso /treinos', () => {
         expect(Array.isArray(response.body)).toBe(true); 
     }); 
 
+    test('GET /treinos deve retornar 401 (SEM O CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.get(url); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado");
+    }); 
+
+    test('GET /treinos deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.get(url)
+        .set('Authorization', 'Bearer 123456890'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido");
+    })
+
     test('GET /treinos/:id deve retornar 200', async() => { 
         const response = await request
         .get(`${url}/${treinoId}`)
@@ -158,6 +185,20 @@ describe('Testes do recurso /treinos', () => {
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
+
+    test('GET /treinos/:id deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.get(`${url}/${treinoId}`)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe('Não autorizado')
+    }); 
+
+    test('GET /treinos/:id deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.get(`${url}/${treinoId}`)
+        .set('Authorization', 'Bearer 12346709123'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    }); 
+
 
     test('GET /treinos/000000000000000000000000 deve retornar 404 (Válido mas não existente)', async() => { 
         const response = await request
@@ -204,6 +245,19 @@ describe('Testes do recurso /treinos', () => {
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
+
+    test('PUT /treinos/:id deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.put(`${url}/${treinoId}`)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado")
+    }); 
+
+    test('PUT /treinos/:id deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.put(`${url}/${treinoId}`)
+        .set('Authorization', 'Bearer 1234567789'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    });
 
     test('PUT /atletas deve retornar 403', async() => { 
         const response = await request
@@ -254,6 +308,20 @@ describe('Testes do recurso /treinos', () => {
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
 
+    test('DELETE /treinos/:id deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.delete(`${url}/${treinoId}`)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe('Não autorizado'); 
+    });
+
+    test('DELETE /treinos/:id deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.delete(`${url}/${treinoId}`)
+        .set('Authorization', 'Bearer 12345678890'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido")
+    }); 
+
+    
     test('PUT /atletas deve retornar 403', async() => { 
         const response = await request
         .delete(`${url}/${treinoId}`)
@@ -293,5 +361,3 @@ afterAll(async() => {
         }; 
     }
 }); 
-
-

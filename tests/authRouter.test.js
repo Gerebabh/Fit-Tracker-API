@@ -1,3 +1,4 @@
+
 const supertest = require('supertest'); 
 const app = require('../app'); 
 const request = supertest(app); 
@@ -12,7 +13,8 @@ let idAluno = null;
 let idProfessor = null;
 let emailAdmin = ""; 
 let senhaAdmin = "";
-let tokenAdmin = ""; 
+let tokenAdmin = "";
+let tokenProfessor = "";  
 let novoToken = ""; 
 let emailAluno = ""; 
 let senhaAluno = ""; 
@@ -95,6 +97,7 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
         expect(response.status).toBe(201); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.token).toBeDefined(); 
+        tokenProfessor = response.body.token; 
     }); 
 
     test('POST /auth/login deve retornar 201 (ALUNO)', async() => { 
@@ -115,6 +118,21 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
         expect(response.body.token).toBeDefined(); 
         novoToken = response.body.token ; 
     }); 
+
+    test('POST /auth/renovar deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.post(urlRenovar)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado"); 
+    }); 
+
+    test('POST /auth/renovar deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.post(urlRenovar)
+        .set('Authorization', 'Bearer 123456789'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe('Token inválido');
+    });
+
+
 
     test('GET /atletas deve retornar 200', async() => { 
         const response = await request.get('/atletas')
@@ -140,6 +158,26 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
         .set('Authorization', `Bearer ${tokenAdmin}`)
         ; 
         expect(response.status).toBe(204); 
+    }); 
+
+    test('DELETE /auth deve retornar 401 (SEM CAMPO AUTHORIZATION)', async() => { 
+        const response = await request.delete(`${urlAuth}/${idAluno}`)
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Não autorizado"); 
+    });
+
+    test('DELETE /auth deve retornar 401 (TOKEN INVÁLIDO)', async() => { 
+        const response = await request.delete(`${urlAuth}/${idAluno}`)
+        .set('Authorization', 'Bearer 1234678901'); 
+        expect(response.status).toBe(401); 
+        expect(response.body.msg).toBe("Token inválido");
+    });
+
+    test('DELETE /auth deve retornar 403 (SEM PERMISSÃO)', async() => { 
+        const response = await request.delete(`${urlAuth}/${idAluno}`)
+        .set('Authorization', `Bearer ${tokenProfessor}`)
+        expect(response.status).toBe(403); 
+        expect(response.body.msg).toBe("Acesso negado, função sem permissão.");
     })
     
     
