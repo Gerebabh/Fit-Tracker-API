@@ -11,5 +11,4 @@ function autorizarFuncoes(...funcoespermitidas) {
     }
 }
 
-module.exports = {autorizarFuncoes}; 
-
+module.exports = {autorizarFuncoes};

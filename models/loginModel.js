@@ -51,6 +51,3 @@ loginSchema.pre('save', async function(next) {
 
 
 module.exports = mongoose.model('Registro', loginSchema); 
-
-
-

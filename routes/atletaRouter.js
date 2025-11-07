@@ -13,8 +13,4 @@ router.get('/:id', verificarToken, atletasController.buscar, atletasController.e
 router.put('/:id', verificarToken, autorizarFuncoes('professor', 'admin', 'aluno') ,atletasController.buscar, atletasController.atualizar); 
 router.delete('/:id', verificarToken, autorizarFuncoes('admin'), atletasController.buscar, atletasController.remover); 
 
-
-
-
-
 module.exports = router; 
