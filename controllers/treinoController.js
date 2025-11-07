@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Treino = require('../models/treinosModel'); 
 
 async function criar(req,res) { 
+
     try {
     const novoTreino = await Treino.create(
         {

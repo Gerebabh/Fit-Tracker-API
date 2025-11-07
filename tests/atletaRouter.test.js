@@ -3,12 +3,77 @@ const app = require('../app');
 const request = supertest(app); 
 
 let id = null ; 
+let adminId = null; 
+let professorId = null; 
+let alunoId = null; 
+let tokenProfessor = null; 
+let tokenAluno = null; 
+let tokenAdmin = null; 
 const url = '/atletas'; 
+
+beforeAll(async() => { 
+    const adminCriado = await request.post('/auth/criarlogin')
+    .send({
+        nome: "Adriano Menezes", 
+        email: "adrianomenezes@mail.com.br", 
+        motivo: "Administrar", 
+        senha: "adriano123", 
+        funcao: "admin"
+    }); 
+    console.log('SENHA COM HASH', adminCriado.body.senha); 
+
+    const professorCriado = await request.post('/auth/criarlogin')
+    .send({
+        nome: "Diogo Crispim", 
+        email: "diogocrispim@mail.com.br", 
+        motivo: "Professor", 
+        senha: "diogo123", 
+        funcao: "professor"
+    }); 
+
+    const alunoCriado = await request.post('/auth/criarlogin')
+    .send({
+        nome: "Geraldo Azevedo", 
+        email: "geraldo@mail.com.br", 
+        motivo: "Aluno",
+        senha: "geraldo123", 
+        funcao: "aluno" 
+    }); 
+
+    adminId = adminCriado.body._id; 
+    professorId = professorCriado.body._id; 
+    alunoId = alunoCriado.body._id; 
+
+    const resAdmin = await request.post('/auth/login')
+    .send({
+        email: adminCriado.body.email, 
+        senha: "adriano123"
+    }); 
+    tokenAdmin = resAdmin.body.token ; 
+
+    const resProfessor = await request.post('/auth/login')
+    .send({
+        email: professorCriado.body.email, 
+        senha: "diogo123" 
+    }); 
+    tokenProfessor = resProfessor.body.token ; 
+
+    const resAluno = await request.post('/auth/login')
+    .send({
+        email: alunoCriado.body.email, 
+        senha: "geraldo123" 
+    }); 
+    tokenAluno = resAluno.body.token
+}); 
+
 
 describe('Testes do recuros /atletas', () => { 
 
     test('POST /atletas deve retornar 201', async() => { 
-        const response = await request.post(url).send({
+        const response = await request
+        .post(url)
+        .set('Authorization', `Bearer ${tokenAdmin}`)
+        .send({
             nome: "Ivan Lugon", 
             email:"ivanlugon@mail.com.br", 
             idade: 32, 
@@ -29,23 +94,37 @@ describe('Testes do recuros /atletas', () => {
         expect(response.body.ativo).toBe(true); 
         id = response.body._id; 
     }); 
+    
+    test('POST /atletas deve retornar 403', async() => { 
+        const response = await request
+        .post(url)
+        .set('Authorization', `Bearer ${tokenAluno}`); 
+
+        expect(response.status).toBe(403); 
+        expect(response.body.msg).toBe("Acesso negado, função sem permissão.")
+    }); 
 
     test('POST /atletas deve retornar 422', async() => { 
-        const response = await request.post(url);
+        const response = await request
+        .post(url)
+        .set('Authorization', `Bearer ${tokenAdmin}`);
         expect(response.status).toBe(422); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Obrigatório passar o corpo da requisição")
-    })
+    }); 
+
 
     test('GET /atletas deve retornar 200', async() => { 
-        const response = await request.get(url); 
+        const response = await request.get(url)
+        .set('Authorization', `Bearer ${tokenAdmin}`) 
         expect(response.status).toBe(200); 
         expect(response.headers['content-type']).toMatch(/json/)
         expect(Array.isArray(response.body)).toBe(true); 
     }); 
 
     test('GET /atletas/:id deve retornar 200', async() => { 
-        const response = await request.get(`${url}/${id}`); 
+        const response = await request.get(`${url}/${id}`)
+        .set('Authorization', `Bearer ${tokenAluno}`); 
         expect(response.status).toBe(200); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body._id).toBeDefined(); 
@@ -59,14 +138,16 @@ describe('Testes do recuros /atletas', () => {
     }); 
 
     test('GET /atletas/0 deve retornar 400(ID inválido)', async() => {
-        const response = await request.get(`${url}/0`); 
+        const response = await request.get(`${url}/0`)
+        .set('Authorization', `Bearer ${tokenAluno}`); 
         expect(response.status).toBe(400); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
 
     test('GET /atletas/000000000000000000000000 deve retornar 404 (ID válido mas não encontrado)', async() => { 
-        const response = await request.get(`${url}/000000000000000000000000`); 
+        const response = await request.get(`${url}/000000000000000000000000`)
+        .set('Authorization', `Bearer ${tokenAluno}`); 
         expect(response.status).toBe(404); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Atleta não encontrado"); 
@@ -74,6 +155,7 @@ describe('Testes do recuros /atletas', () => {
 
     test('PUT /atletas/:id deve retornar 200', async() => { 
         const response = await request.put(`${url}/${id}`)
+        .set('Authorization',`Bearer ${tokenAdmin}`)
         .send(
             {
                 nome: "Filipe Aragão", 
@@ -98,14 +180,19 @@ describe('Testes do recuros /atletas', () => {
     });
 
     test('PUT /atletas/0 deve retornar 400', async() => { 
-        const response = await request.put(`${url}/0`); 
+        const response = await request.put(`${url}/0`)
+        .set('Authorization', `Bearer ${tokenAdmin}`); 
         expect(response.status).toBe(400); 
         expect(response.headers['content-type']).toMatch(/json/);
         expect(response.body.msg).toBe("Parâmetro inválido");
     }); 
 
+
+    
+
     test('PUT /atletas/000000000000000000000000 deve retornar 404', async() => { 
-        const response = await request.put(`${url}/000000000000000000000000`); 
+        const response = await request.put(`${url}/000000000000000000000000`)
+        .set('Authorization', `Bearer ${tokenAdmin}`); 
         expect(response.status).toBe(404); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Atleta não encontrado")
@@ -113,6 +200,7 @@ describe('Testes do recuros /atletas', () => {
 
     test('PUT /atletas/:id deve retornar 422 (Sem passar os parâmetros)', async() => { 
         const response = await request.put(`${url}/${id}`)
+        .set('Authorization', `Bearer ${tokenAdmin}`)
         .send(
             {
                 nome: "", 
@@ -129,22 +217,49 @@ describe('Testes do recuros /atletas', () => {
     })
 
     test('DELETE /atletas/:id deve retornar 204 sem corpo', async() => { 
-        const response = await request.delete(`${url}/${id}`); 
+        const response = await request.delete(`${url}/${id}`)
+        .set('Authorization', `Bearer ${tokenAdmin}`); 
         expect(response.status).toBe(204); 
     }); 
 
     test('DELETE /atletas/0 deve retornar 400', async() => { 
-        const response = await request.delete(`${url}/0`); 
+        const response = await request.delete(`${url}/0`)
+        .set('Authorization', `Bearer ${tokenAdmin}`); 
         expect(response.status).toBe(400); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Parâmetro inválido")
     }); 
 
+    test('DELETE /atletas deve retornar 403', async() => { 
+        const response = await request
+        .delete(`${url}/${id}`)
+        .set('Authorization', `Bearer ${tokenAluno}`); 
+
+        expect(response.status).toBe(403); 
+        expect(response.body.msg).toBe("Acesso negado, função sem permissão.")
+    }); 
+
     test('DELETE /atletas/000000000000000000000000 deve retornar 404', async() => { 
-        const response = await request.delete(`${url}/000000000000000000000000`); 
+        const response = await request.delete(`${url}/000000000000000000000000`)
+        .set('Authorization', `Bearer ${tokenAdmin}`); 
         expect(response.status).toBe(404); 
         expect(response.headers['content-type']).toMatch(/json/); 
         expect(response.body.msg).toBe("Atleta não encontrado")
-    })
+    });  
+}); 
 
-})
+afterAll(async() => { 
+    const usuariosRemovidos = [
+        {id:adminId, token: tokenAdmin}, 
+        {id:professorId, token:tokenAdmin}, 
+        {id:alunoId, token:tokenAdmin},
+    ]; 
+
+    for (const usuario of usuariosRemovidos){ 
+        if(usuario.id){ 
+            await request.delete(`/auth/${usuario.id}`)
+            .set('Authorization', `Bearer ${usuario.token}`); 
+        }
+    }
+}); 
+
