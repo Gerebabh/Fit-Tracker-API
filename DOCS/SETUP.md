@@ -50,7 +50,7 @@ cd Fit-Tracker-API
 
 #### Dependências de produção
 ```bash
-npm install express dotenv mongoose cookie-parser morgan bcrypt jsonwebtoken swagger-ui-express yaml
+npm install express dotenv mongoose cookie-parser morgan bcrypt jsonwebtoken swagger-ui-express yaml cors
 ```
 
 #### Dependências de desenvolvimento
@@ -160,7 +160,12 @@ npm start
 Após iniciar, verifique o status da API:
 ```
 GET http://localhost:3000/
-→ { "status": "API Fit Tracker is running", "version": "1.0.0" }
+→ { 
+  "service": "Fit-Tracker API", 
+  "status": "Online", 
+  "version": "1.0.0", 
+  "documentation": "/api-docs" 
+}
 ```
 
 ---
