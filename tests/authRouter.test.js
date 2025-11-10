@@ -25,7 +25,7 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
 
     test('POST /auth/criarlogin deve retornar 201 (ADMIN)', async() => { 
         const response = await request.post(urlCriarLogin).send({
-            nome: "José da Silva TESTE", 
+            nome: "José da Silva", 
             email: "josedasilva@mail.com.br", 
             motivo: "Trabalho da faculdade", 
             senha: "jose123",
@@ -33,7 +33,7 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
     }); 
         expect(response.status).toBe(201); 
         expect(response.headers['content-type']).toMatch(/json/); 
-        expect(response.body.nome).toBe("José da Silva TESTE"); 
+        expect(response.body.nome).toBe("José da Silva"); 
         expect(response.body.email).toBe("josedasilva@mail.com.br"); 
         expect(response.body.motivo).toBe("Trabalho da faculdade"); 
         expect(response.body.funcao).toBe("admin"); 
@@ -44,34 +44,34 @@ describe('TESTES DO FLUXO AUTENTICAÇÃO /auth', () => {
 
     test('POST /auth/criarlogin deve retornar 201 (PROFESSOR)', async() => { 
         const response = await request.post(urlCriarLogin).send({
-            nome: "Shaolin Matador de Porco TESTE", 
-            email: "shaolinmataporco@mail.com.br", 
+            nome: "Rogério Lucas", 
+            email: "rogeriolucas@mail.com.br", 
             motivo: "Funcionário", 
-            senha: "shaolin123", 
+            senha: "rogerio123", 
             funcao: "professor"
         }); 
         expect(response.status).toBe(201); 
         expect(response.headers['content-type']).toMatch(/json/); 
-        expect(response.body.nome).toBe("Shaolin Matador de Porco TESTE"); 
-        expect(response.body.email).toBe("shaolinmataporco@mail.com.br"); 
+        expect(response.body.nome).toBe("Rogério Lucas"); 
+        expect(response.body.email).toBe("rogeriolucas@mail.com.br"); 
         expect(response.body.funcao).toBe("professor"); 
         idProfessor = response.body._id; 
         emailProfessor = response.body.email; 
-        senhaProfessor = "shaolin123"; 
+        senhaProfessor = "rogerio123"; 
     }); 
 
     test('POST /auth/criarlogin deve retornar 201 (ALUNO)', async() => { 
         const response = await request.post(urlCriarLogin).send({
-            nome: "Paula Vadão TESTE",
-            email: "paulavadao@mail.com.br", 
+            nome: "Paula Mendes",
+            email: "paulamendes@mail.com.br", 
             motivo: 'Aluno', 
             senha: "paula123", 
             funcao: "aluno"
         }); 
         expect(response.status).toBe(201); 
         expect(response.headers['content-type']).toMatch(/json/); 
-        expect(response.body.nome).toBe("Paula Vadão TESTE"); 
-        expect(response.body.email).toBe("paulavadao@mail.com.br"); 
+        expect(response.body.nome).toBe("Paula Mendes"); 
+        expect(response.body.email).toBe("paulamendes@mail.com.br"); 
         expect(response.body.funcao).toBe("aluno"); 
         idAluno = response.body._id; 
         emailAluno = response.body.email; 
