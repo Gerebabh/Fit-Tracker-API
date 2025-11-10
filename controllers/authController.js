@@ -45,3 +45,6 @@ async function remover(req,res) {
 }
 
 module.exports = { criarLogin,login,remover}; 
+
+
+

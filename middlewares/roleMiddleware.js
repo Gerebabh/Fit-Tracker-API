@@ -1,3 +1,5 @@
+
+
 function autorizarFuncoes(...funcoespermitidas) {
     return (req,res,next) => { 
         const {funcao} = req.payload ; 
