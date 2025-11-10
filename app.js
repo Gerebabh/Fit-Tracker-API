@@ -31,13 +31,14 @@ app.use(cookieParser());
 app.use(cors());
 
 
-// 1. ROTA DE STATUS (Deve vir antes das rotas específicas)
+// 1. ROTA DE STATUS
 app.get('/', (req, res) => {
     res.status(200).json({
         service: "Fit-Tracker API",
         status: "Online",
         version: "1.0.0",
-        documentation: "/api-docs"
+        documentation: "/api-docs",
+        accessLink: "http://localhost:3000/api-docs/"
     });
 });
 
