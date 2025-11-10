@@ -23,16 +23,16 @@ beforeAll(async() => {
     }); 
 
     const professorCriado = await request.post('/auth/criarlogin').send({
-        nome: "Shaolin Matador de Porco", 
-        email: "shaolinmataporco@mail.com.br", 
+        nome: "Rogério Lucas", 
+        email: "rogeriolucas@mail.com.br", 
         motivo: "Funcionário", 
-        senha: "shaolin123", 
+        senha: "rogerio123", 
         funcao: "professor"
     }); 
 
     const alunoCriado = await request.post('/auth/criarlogin').send({
-        nome: "Paula Vadão",
-        email: "paulavadao@mail.com.br", 
+        nome: "Paula Mendes",
+        email: "paulamendes@mail.com.br", 
         motivo: 'Aluno', 
         senha: "paula123", 
         funcao: "aluno"
@@ -51,7 +51,7 @@ beforeAll(async() => {
 
     const resProfessor = await request.post('/auth/login').send({
         email: professorCriado.body.email, 
-        senha: "shaolin123" 
+        senha: "rogerio123" 
     }); 
     tokenProfessor = resProfessor.body.token; 
 
