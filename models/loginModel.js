@@ -15,6 +15,7 @@ const loginSchema = new mongoose.Schema({
         required: [true, 'O email é obrigatório'],
         lowercase: true, 
         match: [/.+@.+\..+/, 'Por favor, informe um email válido.'],
+        unique: true,
     }, 
 
     motivo: { 
